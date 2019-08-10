@@ -25,7 +25,6 @@ public class DealActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert);
-        FirebaseUtil.openFbReference("traveldeals", this);
         mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase;
         mDatabaseReference = FirebaseUtil.mDatabaseReference;
         txtTitle = (EditText) findViewById(R.id.txtTitle);
@@ -68,20 +67,32 @@ public class DealActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.save_menu, menu);
-        return true;
-    }
+        if (FirebaseUtil.isAdmin) {
+            menu.findItem(R.id.delete_menu).setVisible(true);
+            menu.findItem(R.id.save_menu).setVisible(true);
+            enableEditexts(true);
+        }
 
-    private void saveDeal() {
-        deal.setTitle(txtTitle.getText().toString());
-        deal.setDescription(txtDescription.getText().toString());
-        deal.setPrice(txtPrice.getText().toString());
-        if (deal.getId() == null) {
-            mDatabaseReference.push().setValue(deal);
-        }
         else {
-            mDatabaseReference.child(deal.getId()).setValue(deal);
+            menu.findItem(R.id.delete_menu).setVisible(false);
+            menu.findItem(R.id.save_menu).setVisible(false);
+            enableEditexts(false);
         }
+
+        return true;
+
     }
+        private void saveDeal () {
+            deal.setTitle(txtTitle.getText().toString());
+            deal.setDescription(txtDescription.getText().toString());
+            deal.setPrice(txtPrice.getText().toString());
+            if (deal.getId() == null) {
+                mDatabaseReference.push().setValue(deal);
+            }
+            else {
+                mDatabaseReference.child(deal.getId()).setValue(deal);
+            }
+        }
 
     private void deleteDeal() {
         if (deal == null) {
@@ -99,5 +110,10 @@ public class DealActivity extends AppCompatActivity {
         txtDescription.setText("");
         txtPrice.setText("");
         txtTitle.requestFocus();
+    }
+    private void enableEditexts(boolean isEnabled) {
+        txtTitle.setEnabled(isEnabled);
+        txtDescription.setEnabled(isEnabled);
+        txtPrice.setEnabled(isEnabled);
     }
 }
