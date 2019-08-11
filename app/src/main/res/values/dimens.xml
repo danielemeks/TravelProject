@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="text_margin_standard">16</dimen>
-    <dimen name="text_margin_stand">8dp</dimen>
-    <dimen name="title_large">20sp</dimen>
-    <dimen name="text_price">18sp</dimen>
-    <dimen name="text_margin_stan">16dp</dimen>
-</resources>
